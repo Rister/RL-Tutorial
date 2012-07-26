@@ -7,6 +7,7 @@ import asciiPanel.AsciiPanel;
 public enum Tile {
     FLOOR((char)250, AsciiPanel.yellow),
     WALL((char)177, AsciiPanel.yellow),
+    WATER('~', AsciiPanel.blue),
     BOUNDS('x', AsciiPanel.brightBlack);
 
     private char glyph;
