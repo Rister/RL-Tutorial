@@ -24,4 +24,8 @@ public enum Tile {
 		this.glyph = glyph;
 		this.color = color;
 	}
+
+	public boolean isDiggable() {
+		return this == Tile.WALL;
+	}
 }
