@@ -51,7 +51,7 @@ public class PlayScreen implements Screen {
     @Override
     public void displayOutput(AsciiPanel terminal) {
 	int left = getScrollX();
-	int top = getScrollX();
+	int top = getScrollY();
 
 	displayTiles(terminal, left, top);
 	terminal.write('x', centerX - left, centerY - top);
