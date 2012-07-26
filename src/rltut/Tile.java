@@ -28,4 +28,8 @@ public enum Tile {
 	public boolean isDiggable() {
 		return this == Tile.WALL;
 	}
+
+	public boolean isGround() {
+		return this != WALL && this != BOUNDS;
+	}
 }

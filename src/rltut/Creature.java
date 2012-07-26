@@ -24,16 +24,20 @@ public class Creature {
 		return color;
 	}
 
+	public void dig(int wx, int wy) {
+		world.dig(wx, wy);
+	}
+
 	public char glyph() {
 		return glyph;
 	}
 
+	public void moveBy(int mx, int my) {
+		ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
+	}
+
 	public void setCreatureAi(CreatureAi ai) {
 		this.ai = ai;
-	}
-	
-	public void dig(int wx, int wy) {
-		world.dig(wx, wy);
 	}
 
 }
