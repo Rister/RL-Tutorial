@@ -26,6 +26,27 @@ public class PlayScreen implements Screen {
 		world = new WorldBuilder(874, 344).makeCaves().build();
 	}
 
+	@Override
+	public void displayOutput(AsciiPanel terminal) {
+		int left = getScrollX();
+		int top = getScrollY();
+
+		displayTiles(terminal, left, top);
+		terminal.write(player.glyph(), player.x - left, player.y - top,
+				player.color());
+	}
+
+	private void displayTiles(AsciiPanel terminal, int left, int top) {
+		for (int x = 0; x < screenWidth; x++) {
+			for (int y = 0; y < screenHeight; y++) {
+				int wx = x + left;
+				int wy = y + top;
+
+				terminal.write(world.glyph(wx, wy), x, y, world.color(wx, wy));
+			}
+		}
+	}
+
 	public int getScrollX() {
 		return Math.max(
 				0,
@@ -40,26 +61,7 @@ public class PlayScreen implements Screen {
 						- screenHeight));
 	}
 
-	private void displayTiles(AsciiPanel terminal, int left, int top) {
-		for (int x = 0; x < screenWidth; x++) {
-			for (int y = 0; y < screenHeight; y++) {
-				int wx = x + left;
-				int wy = y + top;
-
-				terminal.write(world.glyph(wx, wy), x, y, world.color(wx, wy));
-			}
-		}
-	}
-
-	public void displayOutput(AsciiPanel terminal) {
-		int left = getScrollX();
-		int top = getScrollY();
-
-		displayTiles(terminal, left, top);
-		terminal.write(player.glyph(), player.x - left, player.y - top,
-				player.color());
-	}
-
+	@Override
 	public Screen respondToUserInput(KeyEvent key) {
 		switch (key.getKeyCode()) {
 		case KeyEvent.VK_ESCAPE:

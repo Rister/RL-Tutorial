@@ -15,6 +15,10 @@ public class WorldBuilder {
 		return new World(tiles);
 	}
 
+	public WorldBuilder makeCaves() {
+		return randomizeTiles().smooth(8);
+	}
+
 	private WorldBuilder randomizeTiles() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -49,9 +53,5 @@ public class WorldBuilder {
 			tiles = tiles2;
 		}
 		return this;
-	}
-
-	public WorldBuilder makeCaves() {
-		return randomizeTiles().smooth(8);
 	}
 }

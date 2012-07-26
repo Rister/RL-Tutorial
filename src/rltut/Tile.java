@@ -10,19 +10,19 @@ public enum Tile {
 
 	private char glyph;
 
-	public char glyph() {
-		return glyph;
-	}
-
 	private Color color;
+
+	Tile(char glyph, Color color) {
+		this.glyph = glyph;
+		this.color = color;
+	}
 
 	public Color color() {
 		return color;
 	}
 
-	Tile(char glyph, Color color) {
-		this.glyph = glyph;
-		this.color = color;
+	public char glyph() {
+		return glyph;
 	}
 
 	public boolean isDiggable() {
