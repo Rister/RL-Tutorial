@@ -43,7 +43,7 @@ public class WorldBuilder {
 			}
 		    }
 		    tiles2[x][y] = floors >= rocks ? Tile.FLOOR : Tile.WALL;
-		    tiles2[x][y] = floors == rocks ? Tile.WATER : Tile.FLOOR;
+		    tiles2[x][y] = floors == rocks ? Tile.WATER : tiles2[x][y];
 		}
 	    }
 	    tiles = tiles2;
