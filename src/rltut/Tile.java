@@ -2,7 +2,7 @@ package rltut;
 
 import java.awt.Color;
 
-import asciiPanel.asciiPanel;
+import asciiPanel.AsciiPanel;
 
 public enum Tile {
     FLOOR((char)250, AsciiPanel.yellow),
