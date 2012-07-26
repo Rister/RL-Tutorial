@@ -1,31 +1,49 @@
 <project default="compile" name="RL-Tutorial" basedir=".">
-  <description>
-    Build file for RL-Tutorial
-  </description>
+    <description>
+        Build file for RL-Tutorial
+    </description>
 
-  <property name="src" location="src" />
-  <property name="build" location="bin" />
-  <property name="dist" location="dist" />
+    <property name="src" location="src" />
+    <property name="build" location="bin" />
+    <property name="dist" location="dist" />
+    <property name="lib" location="lib" />
 
-  <target name="init">
-    <tstamp />
-    <mkdir dir="${build}" />
-  </target>
+    <target name="init">
+        <tstamp />
+    </target>
 
-  <target name="compile" depends="init" description="compile the source">
-    <javac srcdir="${src}" destdir="${build}" />
-  </target>
+    <target name="compile"
+          depends="init"
+          description="compile the source">
+        <mkdir dir="${build}" />
+        <javac srcdir="${src}"
+           destdir="${build}"
+           classpath="${lib}/asciiPanel.jar"
+           includeantruntime="false"/>
+    </target>
 
-  <target name="package" depends="compile">
-    <jar />
-  </target>
+    <target name="package" depends="compile">
+        <mkdir dir="${dist}" />
+        <jar destfile="${dist}/RLTut.jar"
+         basedir="${build}"
+         includes="**/*.class">
+            <manifest>
+                <attribute name="Main-Class" value="rltut.ApplicationMain"/>
+                <attribute name="Class-Path" value="./lib/asciiPanel.jar"/>
+            </manifest>
+        </jar>
+        <mkdir dir="${dist}/lib" />
+        <copy file="${lib}/asciiPanel.jar" todir="${dist}/lib" />
+    </target>
 
-  <target name="run" depends="package">
-  </target>
+    <target name="run" depends="package">
+        <java jar="${dist}/RLTut.jar"
+	      fork="true" />
+    </target>
 
-  <target name="clean" description="clean up" >
-    <delete dir="${build}" />
-    <delete dir="${dist}" />
-  </target>
+    <target name="clean" description="clean up" >
+        <delete dir="${build}" />
+        <delete dir="${dist}" />
+    </target>
   
 </project>
