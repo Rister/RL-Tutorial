@@ -4,24 +4,43 @@ import java.awt.Color;
 
 public class Creature {
 	private World world;
-
 	public int x;
 	public int y;
 
 	private char glyph;
-
 	private Color color;
 
 	private CreatureAi ai;
 
-	public Creature(World world, char glyph, Color color) {
+	private int maxHp;
+	private int hp;
+
+	private int attackValue;
+	private int defenseValue;
+
+	public Creature(World world, char glyph, Color color, int maxHp,
+			int attack, int defense) {
 		this.world = world;
 		this.glyph = glyph;
 		this.color = color;
+
+		this.maxHp = maxHp;
+		this.hp = maxHp;
+
+		this.attackValue = attack;
+		this.defenseValue = defense;
 	}
 
 	private void attack(Creature other) {
-		world.remove(other);
+		int amount = Math.max(0, attackValue() - other.defenseValue());
+
+		amount = (int) (Math.random() * amount) + 1;
+
+		other.modifyHp(-amount);
+	}
+
+	public int attackValue() {
+		return attackValue;
 	}
 
 	public boolean canEnter(int wx, int wy) {
@@ -32,12 +51,31 @@ public class Creature {
 		return color;
 	}
 
+	public int defenseValue() {
+		return defenseValue;
+	}
+
 	public void dig(int wx, int wy) {
 		world.dig(wx, wy);
 	}
 
 	public char glyph() {
 		return glyph;
+	}
+
+	public int hp() {
+		return hp;
+	}
+
+	public int maxHp() {
+		return maxHp;
+	}
+
+	public void modifyHp(int amount) {
+		hp += amount;
+
+		if (hp < 1)
+			world.remove(this);
 	}
 
 	public void moveBy(int mx, int my) {
@@ -55,6 +93,10 @@ public class Creature {
 
 	public void update() {
 		ai.onUpdate();
+	}
+	
+	public void notify(String message, Object ... params) {
+		ai.onNotify(String.format(message,  params));
 	}
 
 }
