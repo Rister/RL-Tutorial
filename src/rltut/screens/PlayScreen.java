@@ -40,6 +40,14 @@ public class PlayScreen implements Screen {
 		world = new WorldBuilder(874, 344).makeCaves().build();
 	}
 
+	private void displayMessages(AsciiPanel terminal, List<String> messages) {
+		int top = screenHeight - messages.size();
+		for(int i=0; i < messages.size(); i++) {
+			terminal.writeCenter(messages.get(i), top + i);
+		}
+		messages.clear();
+	}
+
 	@Override
 	public void displayOutput(AsciiPanel terminal) {
 		int left = getScrollX();
@@ -84,7 +92,7 @@ public class PlayScreen implements Screen {
 				Math.min(player.y - screenHeight / 2, world.height()
 						- screenHeight));
 	}
-
+	
 	@Override
 	public Screen respondToUserInput(KeyEvent key) {
 		switch (key.getKeyCode()) {
@@ -125,13 +133,5 @@ public class PlayScreen implements Screen {
 		world.update();
 
 		return this;
-	}
-	
-	private void displayMessages(AsciiPanel terminal, List<String> messages) {
-		int top = screenHeight - messages.size();
-		for(int i=0; i < messages.size(); i++) {
-			terminal.writeCenter(messages.get(i), top + i);
-		}
-		messages.clear();
 	}
 }

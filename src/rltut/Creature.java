@@ -61,12 +61,45 @@ public class Creature {
 		world.dig(wx, wy);
 	}
 
+	public void doAction(String message, Object ... params) {
+		int r = 9;
+		for (int ox = -r; ox < r+1; ox++) {
+			for (int oy = -r; oy < r+1; oy++) {
+				if (ox * ox + oy * oy > r * r)
+					continue;
+				
+				Creature other = world.creature(x+ox, y + oy);
+				
+				if(other == null)
+					continue;
+				
+				if (other== this)
+					other.notify("You " + message + ".", params);
+				else other.notify(String.format("The '%s' %s.", glyph, makeSecondPerson(message)), params);
+			}
+		}
+	}
+
 	public char glyph() {
 		return glyph;
 	}
 
 	public int hp() {
 		return hp;
+	}
+
+	private String makeSecondPerson(String text) {
+		// TODO String and Grammar parser in Creature class: Yuck.
+		String[] words = text.split(" ");
+		words[0] = words[0] + "s";
+		
+		StringBuilder builder = new StringBuilder();
+		for (String word : words) {
+			builder.append(" ");
+			builder.append(word);
+		}
+		
+		return builder.toString().trim();
 	}
 
 	public int maxHp() {
@@ -90,50 +123,17 @@ public class Creature {
 		else
 			attack(other);
 	}
-
+	
+	public void notify(String message, Object ... params) {
+		ai.onNotify(String.format(message,  params));
+	}
+	
 	public void setCreatureAi(CreatureAi ai) {
 		this.ai = ai;
 	}
 
 	public void update() {
 		ai.onUpdate();
-	}
-	
-	public void notify(String message, Object ... params) {
-		ai.onNotify(String.format(message,  params));
-	}
-	
-	public void doAction(String message, Object ... params) {
-		int r = 9;
-		for (int ox = -r; ox < r+1; ox++) {
-			for (int oy = -r; oy < r+1; oy++) {
-				if (ox * ox + oy * oy > r * r)
-					continue;
-				
-				Creature other = world.creature(x+ox, y + oy);
-				
-				if(other == null)
-					continue;
-				
-				if (other== this)
-					other.notify("You " + message + ".", params);
-				else other.notify(String.format("The '%s' %s.", glyph, makeSecondPerson(message)), params);
-			}
-		}
-	}
-
-	private String makeSecondPerson(String text) {
-		// TODO String and Grammar parser in Creature class: Yuck.
-		String[] words = text.split(" ");
-		words[0] = words[0] + "s";
-		
-		StringBuilder builder = new StringBuilder();
-		for (String word : words) {
-			builder.append(" ");
-			builder.append(word);
-		}
-		
-		return builder.toString().trim();
 	}
 
 }

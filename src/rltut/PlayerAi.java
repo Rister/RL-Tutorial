@@ -21,6 +21,7 @@ public class PlayerAi extends CreatureAi {
 		}
 	}
 	
+	@Override
 	public void onNotify(String message) {
 		messages.add(message);
 	}
