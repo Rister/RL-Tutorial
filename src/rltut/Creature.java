@@ -37,6 +37,9 @@ public class Creature {
 		amount = (int) (Math.random() * amount) + 1;
 
 		other.modifyHp(-amount);
+		
+		notify("You attack the '%s' for %d damage.", other.glyph, amount);
+		other.notify("The '%s' attacks you for %d damage.", glyph, amount);
 	}
 
 	public int attackValue() {

@@ -1,5 +1,7 @@
 package rltut;
 
+import java.util.List;
+
 import asciiPanel.AsciiPanel;
 
 public class CreatureFactory {
@@ -16,10 +18,10 @@ public class CreatureFactory {
 		return fungus;
 	}
 
-	public Creature newPlayer() {
+	public Creature newPlayer(List<String> messages) {
 		Creature player = new Creature(world, '@', AsciiPanel.brightWhite, 100, 20, 5);
 		world.addAtEmptyLocation(player);
-		new PlayerAi(player);
+		new PlayerAi(player, messages);
 		return player;
 	}
 
