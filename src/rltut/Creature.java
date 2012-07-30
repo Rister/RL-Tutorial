@@ -20,6 +20,14 @@ public class Creature {
 		this.color = color;
 	}
 
+	private void attack(Creature other) {
+		world.remove(other);
+	}
+
+	public boolean canEnter(int wx, int wy) {
+		return world.tile(wx, wy).isGround() && world.creature(wx, wy) == null;
+	}
+
 	public Color color() {
 		return color;
 	}
@@ -33,11 +41,20 @@ public class Creature {
 	}
 
 	public void moveBy(int mx, int my) {
-		ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
+		Creature other = world.creature(x + mx, y + my);
+
+		if (other == null)
+			ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
+		else
+			attack(other);
 	}
 
 	public void setCreatureAi(CreatureAi ai) {
 		this.ai = ai;
+	}
+
+	public void update() {
+		ai.onUpdate();
 	}
 
 }

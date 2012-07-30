@@ -8,7 +8,7 @@ public class World {
 	private Tile[][] tiles;
 	private int width;
 	private int height;
-	
+
 	private List<Creature> creatures;
 
 	public World(Tile[][] tiles) {
@@ -25,7 +25,7 @@ public class World {
 		do {
 			x = (int) (Math.random() * width);
 			y = (int) (Math.random() * height);
-		} while (!tile(x, y).isGround() || creature(x,y) != null);
+		} while (!tile(x, y).isGround() || creature(x, y) != null);
 
 		creature.x = x;
 		creature.y = y;
@@ -34,6 +34,14 @@ public class World {
 
 	public Color color(int x, int y) {
 		return tile(x, y).color();
+	}
+
+	public Creature creature(int x, int y) {
+		for (Creature c : creatures) {
+			if (c.x == x && c.y == y)
+				return c;
+		}
+		return null;
 	}
 
 	public void dig(int x, int y) {
@@ -49,6 +57,10 @@ public class World {
 		return height;
 	}
 
+	public void remove(Creature other) {
+		creatures.remove(other);
+	}
+
 	public Tile tile(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height)
 			return Tile.BOUNDS;
@@ -56,15 +68,14 @@ public class World {
 			return tiles[x][y];
 	}
 
+	public void update() {
+		List<Creature> toUpdate = new ArrayList<Creature>(creatures);
+		for (Creature creature : toUpdate) {
+			creature.update();
+		}
+	}
+
 	public int width() {
 		return width;
-	}
-	
-	public Creature creature(int x, int y) {
-		for (Creature c : creatures) {
-			if (c.x == x && c.y == y)
-				return c;
-		}
-		return null;
 	}
 }
