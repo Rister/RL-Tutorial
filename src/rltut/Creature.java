@@ -38,8 +38,7 @@ public class Creature {
 
 		other.modifyHp(-amount);
 		
-		notify("You attack the '%s' for %d damage.", other.glyph, amount);
-		other.notify("The '%s' attacks you for %d damage.", glyph, amount);
+		doAction("attack the '%s' for %d damage", other.glyph, amount);
 	}
 
 	public int attackValue() {
@@ -77,8 +76,10 @@ public class Creature {
 	public void modifyHp(int amount) {
 		hp += amount;
 
-		if (hp < 1)
+		if (hp < 1){
 			world.remove(this);
+			doAction("die");
+		}
 	}
 
 	public void moveBy(int mx, int my) {
@@ -100,6 +101,39 @@ public class Creature {
 	
 	public void notify(String message, Object ... params) {
 		ai.onNotify(String.format(message,  params));
+	}
+	
+	public void doAction(String message, Object ... params) {
+		int r = 9;
+		for (int ox = -r; ox < r+1; ox++) {
+			for (int oy = -r; oy < r+1; oy++) {
+				if (ox * ox + oy * oy > r * r)
+					continue;
+				
+				Creature other = world.creature(x+ox, y + oy);
+				
+				if(other == null)
+					continue;
+				
+				if (other== this)
+					other.notify("You " + message + ".", params);
+				else other.notify(String.format("The '%s' %s.", glyph, makeSecondPerson(message)), params);
+			}
+		}
+	}
+
+	private String makeSecondPerson(String text) {
+		// TODO String and Grammar parser in Creature class: Yuck.
+		String[] words = text.split(" ");
+		words[0] = words[0] + "s";
+		
+		StringBuilder builder = new StringBuilder();
+		for (String word : words) {
+			builder.append(" ");
+			builder.append(word);
+		}
+		
+		return builder.toString().trim();
 	}
 
 }
