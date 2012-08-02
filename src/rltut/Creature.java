@@ -176,5 +176,9 @@ public class Creature {
 	public int visionRadius() {
 		return visionRadius;
 	}
+	
+	public Creature creature(int wx, int wy, int wz) {
+		return world.creature(wx, wy, wz);
+	}
 
 }
