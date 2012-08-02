@@ -44,6 +44,10 @@ public class PlayScreen implements Screen {
 			for (int i = 0; i < world.width() * world.height() / 20; i++) {
 				factory.newRock(z);
 			}
+			for (int i = 0; i < 5; i++)
+				factory.newBuinessCard(z);
+			for (int i = 0; i < 2; i++)
+				factory.newVaccuumCleaner(z);
 		}
 		factory.newVictoryItem(world.depth() - 1);
 	}

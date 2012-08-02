@@ -44,5 +44,17 @@ public class StuffFactory {
 		world.addAtEmptyLocation(item, depth);
 		return item;
 	}
+	
+	public Item newBuinessCard(int depth) {
+		Item item = new Item('_', AsciiPanel.brightCyan, "spare business card");
+		world.addAtEmptyLocation(item, depth);
+		return item;
+	}
+	
+	public Item newVaccuumCleaner(int depth) {
+		Item item = new Item('&', AsciiPanel.brightCyan, "old hoover vaccuum");
+		world.addAtEmptyLocation(item, depth);
+		return item;
+	}
 
 }
