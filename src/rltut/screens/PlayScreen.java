@@ -32,6 +32,15 @@ public class PlayScreen implements Screen {
 
 		StuffFactory stuffFactory = new StuffFactory(world);
 		createCreatures(stuffFactory);
+		createItems(stuffFactory);
+	}
+
+	private void createItems(StuffFactory factory) {
+		for (int z = 0; z < world.depth(); z++) {
+			for (int i = 0; i < world.width() * world.height() / 20; i++) {
+				factory.newRock(z);
+			}
+		}
 	}
 
 	private void createCreatures(StuffFactory stuffFactory) {

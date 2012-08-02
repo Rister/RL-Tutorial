@@ -10,6 +10,7 @@ public class World {
 	private int height;
 	private int depth;
 	private List<Creature> creatures;;
+	private Item[][][] items;
 
 	public World(Tile[][][] tiles) {
 		this.tiles = tiles;
@@ -17,6 +18,7 @@ public class World {
 		this.height = tiles[0].length;
 		this.depth = tiles[0][0].length;
 		this.creatures = new ArrayList<Creature>();
+		this.items = new Item[width][height][depth];
 	}
 
 	public void addAtEmptyLocation(Creature creature, int z) {
@@ -33,10 +35,28 @@ public class World {
 		creature.z = z;
 		creatures.add(creature);
 	}
+	
+	public void addAtEmptyLocation(Item item, int depth) {
+		int x;
+		int y;
+		
+		do {
+			x = (int)(Math.random() * width);
+			y = (int)(Math.random() * height);
+		} while (!tile(x,y,depth).isGround() || item(x,y,depth) != null);
+		
+		items[x][y][depth] = item;
+	}
 
 	public Color color(int x, int y, int z) {
 		Creature creature = creature(x, y, z);
-		return creature != null ? creature.color() : tile(x, y, z).color();
+		
+		if (creature != null)
+			return creature.color();
+		if(item(x,y,z) != null)
+			return item(x,y,z).color();
+		
+		return tile(x,y,z).color();
 	}
 
 	public Creature creature(int x, int y, int z) {
@@ -58,7 +78,11 @@ public class World {
 
 	public char glyph(int x, int y, int z) {
 		Creature creature = creature(x, y, z);
-		return creature != null ? creature.glyph() : tile(x, y, z).glyph();
+		if (creature!= null)
+			return creature.glyph();
+		if (item(x,y,z) != null)
+			return item(x,y,z).glyph();
+		return tile(x,y,z).glyph();
 	}
 
 	public int height() {
@@ -85,5 +109,9 @@ public class World {
 
 	public int width() {
 		return width;
+	}
+	
+	public Item item(int x, int y, int z) {
+		return items[x][y][z];
 	}
 }

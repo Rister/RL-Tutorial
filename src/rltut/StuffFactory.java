@@ -32,5 +32,11 @@ public class StuffFactory {
 		new BatAi(bat);
 		return bat;
 	}
+	
+	public Item newRock(int depth) {
+		Item rock = new Item(',', AsciiPanel.yellow, "rock");
+		world.addAtEmptyLocation(rock, depth);
+		return rock;
+	}
 
 }
