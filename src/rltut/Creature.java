@@ -128,6 +128,9 @@ public class Creature {
 	}
 
 	public void moveBy(int mx, int my, int mz) {
+		if (mx == 0 && my == 0 && mz == 0)
+			return;
+		
 		Tile tile = world.tile(x + mx, y + my, z + mz);
 
 		if (mz == -1) {
