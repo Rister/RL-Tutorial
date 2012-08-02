@@ -38,14 +38,17 @@ public class PlayScreen implements Screen {
 		player = creatureFactory.newPlayer(messages, fov);
 
 		for (int z = 0; z < world.depth(); z++) {
-			for (int i = 0; i < 15; i++) {
+			for (int i = 0; i < 1; i++) {
 				creatureFactory.newFungus(z);
+			}
+			for (int i = 0; i < 20; i++) {
+				creatureFactory.newBat(z);
 			}
 		}
 	}
 
 	private void createWorld() {
-		world = new WorldBuilder(120, 90, 4).makeCaves().build();
+		world = new WorldBuilder(80, 45, 4).makeCaves().build();
 	}
 
 	private void displayMessages(AsciiPanel terminal, List<String> messages) {
@@ -153,6 +156,9 @@ public class PlayScreen implements Screen {
 		}
 
 		world.update();
+		
+		if (player.hp() < 1)
+			return new LoseScreen();
 
 		return this;
 	}

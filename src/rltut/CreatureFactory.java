@@ -25,5 +25,12 @@ public class CreatureFactory {
 		new PlayerAi(player, messages, fov);
 		return player;
 	}
+	
+	public Creature newBat(int depth) {
+		Creature bat = new Creature(world, 'b', AsciiPanel.yellow, 15, 5, 0);
+		world.addAtEmptyLocation(bat, depth);
+		new BatAi(bat);
+		return bat;
+	}
 
 }
