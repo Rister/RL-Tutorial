@@ -19,7 +19,7 @@ public class PlayScreen implements Screen {
 	private Creature player;
 
 	private List<String> messages;
-	
+
 	private FieldOfView fov;
 
 	public PlayScreen() {
@@ -27,7 +27,7 @@ public class PlayScreen implements Screen {
 		screenHeight = 21;
 		messages = new ArrayList<String>();
 		createWorld();
-		
+
 		fov = new FieldOfView(world);
 
 		StuffFactory stuffFactory = new StuffFactory(world);
@@ -156,6 +156,10 @@ public class PlayScreen implements Screen {
 		}
 
 		switch (key.getKeyChar()) {
+		case 'g':
+		case ',':
+			player.pickup();
+			break;
 		case '<':
 			player.moveBy(0, 0, -1);
 			break;
@@ -165,7 +169,7 @@ public class PlayScreen implements Screen {
 		}
 
 		world.update();
-		
+
 		if (player.hp() < 1)
 			return new LoseScreen();
 

@@ -14,25 +14,27 @@ public class Creature {
 
 	private CreatureAi ai;
 
+	private Inventory inventory;
+
 	private int maxHp;
 	private int hp;
-
 	private int attackValue;
 	private int defenseValue;
 
 	private int visionRadius;
 
-	public Creature(World world, String name, char glyph, Color color, int maxHp,
-			int attack, int defense) {
+	public Creature(World world, String name, char glyph, Color color,
+			int maxHp, int attack, int defense) {
 		this.world = world;
-		
+
 		this.name = name;
 		this.glyph = glyph;
 		this.color = color;
 
+		this.inventory = new Inventory(20);
+		
 		this.maxHp = maxHp;
 		this.hp = maxHp;
-
 		this.attackValue = attack;
 		this.defenseValue = defense;
 
@@ -105,6 +107,10 @@ public class Creature {
 
 	public int hp() {
 		return hp;
+	}
+
+	public Inventory inventory() {
+		return inventory;
 	}
 
 	private String makeSecondPerson(String text) {
@@ -186,6 +192,24 @@ public class Creature {
 
 	public int visionRadius() {
 		return visionRadius;
+	}
+	
+	public void pickup() {
+		Item item = world.item(x, y, z);
+		
+		if (inventory.isFull() || item == null) {
+			doAction("grab at the ground");
+		} else {
+			doAction("pickup a %s", item.name());
+			world.remove(x, y, z);
+			inventory.add(item);
+		}
+	}
+	
+	public void drop(Item item) {
+		doAction("drop a " + item.name());
+		inventory.remove(item);
+		world.addAtEmptySpace(item, x, y, z);
 	}
 
 }
