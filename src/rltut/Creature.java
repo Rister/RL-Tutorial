@@ -8,6 +8,7 @@ public class Creature {
 	public int y;
 	public int z;
 
+	private String name;
 	private char glyph;
 	private Color color;
 
@@ -21,9 +22,11 @@ public class Creature {
 
 	private int visionRadius;
 
-	public Creature(World world, char glyph, Color color, int maxHp,
+	public Creature(World world, String name, char glyph, Color color, int maxHp,
 			int attack, int defense) {
 		this.world = world;
+		
+		this.name = name;
 		this.glyph = glyph;
 		this.color = color;
 
@@ -43,7 +46,7 @@ public class Creature {
 
 		other.modifyHp(-amount);
 
-		doAction("attack the '%s' for %d damage", other.glyph, amount);
+		doAction("attack the %s for %d damage", other.name, amount);
 	}
 
 	public int attackValue() {
@@ -61,6 +64,10 @@ public class Creature {
 
 	public Color color() {
 		return color;
+	}
+
+	public Creature creature(int wx, int wy, int wz) {
+		return world.creature(wx, wy, wz);
 	}
 
 	public int defenseValue() {
@@ -86,7 +93,7 @@ public class Creature {
 				if (other == this)
 					other.notify("You " + message + ".", params);
 				else if (other.canSee(x, y, z))
-					other.notify(String.format("The '%s' %s.", glyph,
+					other.notify(String.format("The %s %s.", name,
 							makeSecondPerson(message)), params);
 			}
 		}
@@ -130,7 +137,7 @@ public class Creature {
 	public void moveBy(int mx, int my, int mz) {
 		if (mx == 0 && my == 0 && mz == 0)
 			return;
-		
+
 		Tile tile = world.tile(x + mx, y + my, z + mz);
 
 		if (mz == -1) {
@@ -157,6 +164,10 @@ public class Creature {
 			attack(other);
 	}
 
+	public String name() {
+		return name;
+	}
+
 	public void notify(String message, Object... params) {
 		ai.onNotify(String.format(message, params));
 	}
@@ -175,10 +186,6 @@ public class Creature {
 
 	public int visionRadius() {
 		return visionRadius;
-	}
-	
-	public Creature creature(int wx, int wy, int wz) {
-		return world.creature(wx, wy, wz);
 	}
 
 }
