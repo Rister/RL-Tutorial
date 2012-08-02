@@ -7,6 +7,7 @@ import java.util.List;
 
 import rltut.Creature;
 import rltut.CreatureFactory;
+import rltut.FieldOfView;
 import rltut.World;
 import rltut.WorldBuilder;
 import asciiPanel.AsciiPanel;
@@ -18,19 +19,23 @@ public class PlayScreen implements Screen {
 	private Creature player;
 
 	private List<String> messages;
+	
+	private FieldOfView fov;
 
 	public PlayScreen() {
 		screenWidth = 80;
 		screenHeight = 21;
 		messages = new ArrayList<String>();
 		createWorld();
+		
+		fov = new FieldOfView(world);
 
 		CreatureFactory creatureFactory = new CreatureFactory(world);
 		createCreatures(creatureFactory);
 	}
 
 	private void createCreatures(CreatureFactory creatureFactory) {
-		player = creatureFactory.newPlayer(messages);
+		player = creatureFactory.newPlayer(messages, fov);
 
 		for (int z = 0; z < world.depth(); z++) {
 			for (int i = 0; i < 15; i++) {
@@ -67,6 +72,8 @@ public class PlayScreen implements Screen {
 	}
 
 	private void displayTiles(AsciiPanel terminal, int left, int top) {
+		fov.update(player.x, player.y, player.z, player.visionRadius());
+
 		for (int x = 0; x < screenWidth; x++) {
 			for (int y = 0; y < screenHeight; y++) {
 				int wx = x + left;
@@ -80,12 +87,13 @@ public class PlayScreen implements Screen {
 					else
 						terminal.write(world.glyph(wx, wy, player.z), x, y,
 								world.color(wx, wy, player.z));
-				} else {
-					terminal.write(world.glyph(wx, wy, player.z), x, y,
+				} else
+					terminal.write(fov.tile(wx, wy, player.z).glyph(), x, y,
 							Color.darkGray);
-				}
 			}
+
 		}
+
 	}
 
 	public int getScrollX() {
