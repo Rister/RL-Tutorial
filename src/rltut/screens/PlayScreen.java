@@ -43,6 +43,7 @@ public class PlayScreen implements Screen {
 				factory.newRock(z);
 			}
 		}
+		factory.newVictoryItem(world.depth() - 1);
 	}
 
 	private void createCreatures(StuffFactory stuffFactory) {
