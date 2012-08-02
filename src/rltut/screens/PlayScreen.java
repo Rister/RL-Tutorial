@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rltut.Creature;
+import rltut.Item;
 import rltut.StuffFactory;
 import rltut.FieldOfView;
+import rltut.Tile;
 import rltut.World;
 import rltut.WorldBuilder;
 import asciiPanel.AsciiPanel;
@@ -130,10 +132,6 @@ public class PlayScreen implements Screen {
 			subscreen = subscreen.respondToUserInput(key);
 		} else {
 			switch (key.getKeyCode()) {
-			case KeyEvent.VK_ESCAPE:
-				return new LoseScreen();
-			case KeyEvent.VK_ENTER:
-				return new WinScreen();
 			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_H:
 				player.moveBy(-1, 0, 0);
@@ -173,7 +171,10 @@ public class PlayScreen implements Screen {
 				player.pickup();
 				break;
 			case '<':
-				player.moveBy(0, 0, -1);
+				if (userIsTryingToExit())
+					return userExits();
+				else
+					player.moveBy(0, 0, -1);
 				break;
 			case '>':
 				player.moveBy(0, 0, 1);
@@ -188,5 +189,17 @@ public class PlayScreen implements Screen {
 			return new LoseScreen();
 
 		return this;
+	}
+
+	private Screen userExits() {
+		for (Item item : player.inventory().getItems()) {
+			if (item != null && item.name().equals("teddy bear"))
+				return new WinScreen();
+		}
+		return new LoseScreen();
+	}
+
+	private boolean userIsTryingToExit() {
+		return player.z == 0 && world.tile(player.x, player.y, player.z) == Tile.STAIRS_UP;
 	}
 }
