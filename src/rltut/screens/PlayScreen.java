@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rltut.Creature;
-import rltut.CreatureFactory;
+import rltut.StuffFactory;
 import rltut.FieldOfView;
 import rltut.World;
 import rltut.WorldBuilder;
@@ -30,19 +30,19 @@ public class PlayScreen implements Screen {
 		
 		fov = new FieldOfView(world);
 
-		CreatureFactory creatureFactory = new CreatureFactory(world);
-		createCreatures(creatureFactory);
+		StuffFactory stuffFactory = new StuffFactory(world);
+		createCreatures(stuffFactory);
 	}
 
-	private void createCreatures(CreatureFactory creatureFactory) {
-		player = creatureFactory.newPlayer(messages, fov);
+	private void createCreatures(StuffFactory stuffFactory) {
+		player = stuffFactory.newPlayer(messages, fov);
 
 		for (int z = 0; z < world.depth(); z++) {
 			for (int i = 0; i < 1; i++) {
-				creatureFactory.newFungus(z);
+				stuffFactory.newFungus(z);
 			}
 			for (int i = 0; i < 20; i++) {
-				creatureFactory.newBat(z);
+				stuffFactory.newBat(z);
 			}
 		}
 	}

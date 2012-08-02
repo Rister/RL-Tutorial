@@ -4,10 +4,10 @@ import java.util.List;
 
 import asciiPanel.AsciiPanel;
 
-public class CreatureFactory {
+public class StuffFactory {
 	private World world;
 
-	public CreatureFactory(World world) {
+	public StuffFactory(World world) {
 		this.world = world;
 	}
 
