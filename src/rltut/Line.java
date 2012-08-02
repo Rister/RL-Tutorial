@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Line {
+public class Line implements Iterable<Point> {
 	private List<Point> points;
 
 	public Line(int x0, int y0, int x1, int y1) {
@@ -39,6 +39,7 @@ public class Line {
 		return points;
 	}
 
+	@Override
 	public Iterator<Point> iterator() {
 		return points.iterator();
 	}

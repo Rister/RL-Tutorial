@@ -1,5 +1,6 @@
 package rltut.screens;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,13 +72,18 @@ public class PlayScreen implements Screen {
 				int wx = x + left;
 				int wy = y + top;
 
-				Creature creature = world.creature(wx, wy, player.z);
-				if (creature != null)
-					terminal.write(creature.glyph(), creature.x - left,
-							creature.y - top, creature.color());
-				else
+				if (player.canSee(wx, wy, player.z)) {
+					Creature creature = world.creature(wx, wy, player.z);
+					if (creature != null)
+						terminal.write(creature.glyph(), creature.x - left,
+								creature.y - top, creature.color());
+					else
+						terminal.write(world.glyph(wx, wy, player.z), x, y,
+								world.color(wx, wy, player.z));
+				} else {
 					terminal.write(world.glyph(wx, wy, player.z), x, y,
-							world.color(wx, wy, player.z));
+							Color.darkGray);
+				}
 			}
 		}
 	}
