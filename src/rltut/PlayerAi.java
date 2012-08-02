@@ -3,7 +3,7 @@ package rltut;
 import java.util.List;
 
 public class PlayerAi extends CreatureAi {
-	
+
 	private List<String> messages;
 
 	public PlayerAi(Creature creature, List<String> messages) {
@@ -21,7 +21,7 @@ public class PlayerAi extends CreatureAi {
 			creature.dig(x, y, z);
 		}
 	}
-	
+
 	@Override
 	public void onNotify(String message) {
 		messages.add(message);

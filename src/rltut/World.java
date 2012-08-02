@@ -46,7 +46,9 @@ public class World {
 		return null;
 	}
 
-	public int depth() {return depth;}
+	public int depth() {
+		return depth;
+	}
 
 	public void dig(int x, int y, int z) {
 		if (tile(x, y, z).isDiggable())

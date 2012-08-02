@@ -38,7 +38,7 @@ public class Creature {
 		amount = (int) (Math.random() * amount) + 1;
 
 		other.modifyHp(-amount);
-		
+
 		doAction("attack the '%s' for %d damage", other.glyph, amount);
 	}
 
@@ -47,7 +47,8 @@ public class Creature {
 	}
 
 	public boolean canEnter(int wx, int wy, int wz) {
-		return world.tile(wx, wy, wz).isGround() && world.creature(wx, wy, wz) == null;
+		return world.tile(wx, wy, wz).isGround()
+				&& world.creature(wx, wy, wz) == null;
 	}
 
 	public Color color() {
@@ -62,21 +63,23 @@ public class Creature {
 		world.dig(wx, wy, wz);
 	}
 
-	public void doAction(String message, Object ... params) {
+	public void doAction(String message, Object... params) {
 		int r = 9;
-		for (int ox = -r; ox < r+1; ox++) {
-			for (int oy = -r; oy < r+1; oy++) {
+		for (int ox = -r; ox < r + 1; ox++) {
+			for (int oy = -r; oy < r + 1; oy++) {
 				if (ox * ox + oy * oy > r * r)
 					continue;
-				
-				Creature other = world.creature(x+ox, y + oy, z);
-				
-				if(other == null)
+
+				Creature other = world.creature(x + ox, y + oy, z);
+
+				if (other == null)
 					continue;
-				
-				if (other== this)
+
+				if (other == this)
 					other.notify("You " + message + ".", params);
-				else other.notify(String.format("The '%s' %s.", glyph, makeSecondPerson(message)), params);
+				else
+					other.notify(String.format("The '%s' %s.", glyph,
+							makeSecondPerson(message)), params);
 			}
 		}
 	}
@@ -93,13 +96,13 @@ public class Creature {
 		// TODO String and Grammar parser in Creature class: Yuck.
 		String[] words = text.split(" ");
 		words[0] = words[0] + "s";
-		
+
 		StringBuilder builder = new StringBuilder();
 		for (String word : words) {
 			builder.append(" ");
 			builder.append(word);
 		}
-		
+
 		return builder.toString().trim();
 	}
 
@@ -110,43 +113,43 @@ public class Creature {
 	public void modifyHp(int amount) {
 		hp += amount;
 
-		if (hp < 1){
+		if (hp < 1) {
 			world.remove(this);
 			doAction("die");
 		}
 	}
 
 	public void moveBy(int mx, int my, int mz) {
-		Tile tile = world.tile(x+mx, y+my, z+mz);
-		
+		Tile tile = world.tile(x + mx, y + my, z + mz);
+
 		if (mz == -1) {
 			if (tile == Tile.STAIRS_DOWN) {
-				doAction("walk up the stairs to level %d", z+mz+1);
+				doAction("walk up the stairs to level %d", z + mz + 1);
 			} else {
 				doAction("try to go up but are stopped by the cave ceiling");
 				return;
 			}
 		} else if (mz == 1) {
 			if (tile == Tile.STAIRS_UP) {
-				doAction("walk down the stairs to level %d", z+mz+1);
+				doAction("walk down the stairs to level %d", z + mz + 1);
 			} else {
 				doAction("try to go down but are stopped by the cave floor");
 				return;
 			}
 		}
-		
-		Creature other = world.creature(x + mx, y + my, z+mz);
+
+		Creature other = world.creature(x + mx, y + my, z + mz);
 
 		if (other == null)
-			ai.onEnter(x + mx, y + my, z+mz, tile);
+			ai.onEnter(x + mx, y + my, z + mz, tile);
 		else
 			attack(other);
 	}
-	
-	public void notify(String message, Object ... params) {
-		ai.onNotify(String.format(message,  params));
+
+	public void notify(String message, Object... params) {
+		ai.onNotify(String.format(message, params));
 	}
-	
+
 	public void setCreatureAi(CreatureAi ai) {
 		this.ai = ai;
 	}

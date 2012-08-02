@@ -51,16 +51,16 @@ public class WorldBuilder {
 
 	private void connectRegionsDown(int z, int r1, int r2) {
 		List<Point> candidates = findRegionOverlaps(z, r1, r2);
-		
+
 		int stairs = 0;
 		do {
 			Point p = candidates.remove(0);
 			tiles[p.x][p.y][z] = Tile.STAIRS_DOWN;
-			tiles[p.x][p.y][z+1] = Tile.STAIRS_UP;
+			tiles[p.x][p.y][z + 1] = Tile.STAIRS_UP;
 			stairs++;
 		} while (candidates.size() / stairs > 250);
 	}
-	
+
 	private WorldBuilder createRegions() {
 		regions = new int[width][height][depth];
 
@@ -78,7 +78,7 @@ public class WorldBuilder {
 		}
 		return this;
 	}
-	
+
 	private int fillRegion(int region, int x, int y, int z) {
 		int size = 1;
 		ArrayList<Point> open = new ArrayList<Point>();
@@ -104,7 +104,7 @@ public class WorldBuilder {
 		}
 		return size;
 	}
-	
+
 	private List<Point> findRegionOverlaps(int z, int r1, int r2) {
 		ArrayList<Point> candidates = new ArrayList<Point>();
 
@@ -117,23 +117,21 @@ public class WorldBuilder {
 				}
 			}
 		}
-		
+
 		Collections.shuffle(candidates);
 		return candidates;
 	}
-	
+
 	public WorldBuilder makeCaves() {
-		return randomizeTiles()
-				.smooth(8)
-				.createRegions()
-				.connectRegions();
+		return randomizeTiles().smooth(8).createRegions().connectRegions();
 	}
 
 	private WorldBuilder randomizeTiles() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				for (int z = 0; z < depth; z++) {
-					tiles[x][y][z] = Math.random() < 0.5 ? Tile.FLOOR : Tile.WALL;
+					tiles[x][y][z] = Math.random() < 0.5 ? Tile.FLOOR
+							: Tile.WALL;
 				}
 			}
 		}

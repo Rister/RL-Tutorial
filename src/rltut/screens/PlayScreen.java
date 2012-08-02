@@ -15,7 +15,7 @@ public class PlayScreen implements Screen {
 	private int screenWidth;
 	private int screenHeight;
 	private Creature player;
-	
+
 	private List<String> messages;
 
 	public PlayScreen() {
@@ -44,7 +44,7 @@ public class PlayScreen implements Screen {
 
 	private void displayMessages(AsciiPanel terminal, List<String> messages) {
 		int top = screenHeight - messages.size();
-		for(int i=0; i < messages.size(); i++) {
+		for (int i = 0; i < messages.size(); i++) {
 			terminal.writeCenter(messages.get(i), top + i);
 		}
 		messages.clear();
@@ -58,8 +58,9 @@ public class PlayScreen implements Screen {
 		displayTiles(terminal, left, top);
 		terminal.write(player.glyph(), player.x - left, player.y - top,
 				player.color());
-		
-		String stats = String.format(" %3d/%3d hp", player.hp(), player.maxHp());
+
+		String stats = String
+				.format(" %3d/%3d hp", player.hp(), player.maxHp());
 		terminal.write(stats, 1, 23);
 		displayMessages(terminal, messages);
 	}
