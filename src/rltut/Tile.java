@@ -11,9 +11,30 @@ import asciiPanel.AsciiPanel;
  * 
  */
 public enum Tile {
-	FLOOR((char) 250, AsciiPanel.yellow), WALL((char) 177, AsciiPanel.yellow), BOUNDS(
-			'x', AsciiPanel.brightBlack), STAIRS_DOWN('>', AsciiPanel.white), STAIRS_UP(
-			'<', AsciiPanel.white), UNKNOWN(' ', AsciiPanel.white);
+	/**
+	 * Floor tile
+	 */
+	FLOOR((char) 250, AsciiPanel.yellow),
+	/**
+	 * Wall Tile
+	 */
+	WALL((char) 177, AsciiPanel.yellow),
+	/**
+	 * Out of bounds
+	 */
+	BOUNDS('x', AsciiPanel.brightBlack),
+	/**
+	 * Downward Staircase
+	 */
+	STAIRS_DOWN('>', AsciiPanel.white),
+	/**
+	 * Upward Staircase
+	 */
+	STAIRS_UP('<', AsciiPanel.white),
+	/**
+	 * Unknown Tile
+	 */
+	UNKNOWN(' ', AsciiPanel.white);
 
 	private char glyph;
 

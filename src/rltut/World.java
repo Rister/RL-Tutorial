@@ -75,6 +75,48 @@ public class World {
 	}
 
 	/**
+	 * puts an item at or around the given coordinate.
+	 * 
+	 * @param item
+	 *            Item to place
+	 * @param x
+	 *            coordinate
+	 * @param y
+	 *            coordinate
+	 * @param z
+	 *            coordinate
+	 */
+	public void addAtEmptySpace(Item item, int x, int y, int z) {
+		if (item == null)
+			return;
+
+		List<Point> points = new ArrayList<Point>();
+		List<Point> checked = new ArrayList<Point>();
+
+		points.add(new Point(x, y, z));
+
+		while (!points.isEmpty()) {
+			Point p = points.remove(0);
+			checked.add(p);
+
+			if (!tile(p.x, p.y, p.z).isGround())
+				continue;
+
+			if (items[p.x][p.y][p.z] == null) {
+				items[p.x][p.y][p.z] = item;
+				Creature c = this.creature(p.x, p.y, p.z);
+				if (c != null)
+					c.notify("A %s lands between your feet.", item.name());
+				return;
+			} else {
+				List<Point> neighbors = p.neighbors8();
+				neighbors.removeAll(checked);
+				points.addAll(neighbors);
+			}
+		}
+	}
+
+	/**
 	 * Find the color that this tile should be. Whether that be an item, a
 	 * critter, or simply the color of the floor.
 	 * 
@@ -156,6 +198,18 @@ public class World {
 	}
 
 	/**
+	 * Looks for an item on the given coordinates and returns what it finds.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return the item on the given Coordinates
+	 */
+	public Item item(int x, int y, int z) {
+		return items[x][y][z];
+	}
+
+	/**
 	 * removes a given creature from the world.
 	 * 
 	 * @param other
@@ -163,6 +217,17 @@ public class World {
 	 */
 	public void remove(Creature other) {
 		creatures.remove(other);
+	}
+
+	/**
+	 * Removes item from the given coordinates
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void remove(int x, int y, int z) {
+		items[x][y][z] = null;
 	}
 
 	/**
@@ -193,70 +258,5 @@ public class World {
 	 */
 	public int width() {
 		return width;
-	}
-
-	/**
-	 * Looks for an item on the given coordinates and returns what it finds.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return the item on the given Coordinates
-	 */
-	public Item item(int x, int y, int z) {
-		return items[x][y][z];
-	}
-
-	/**
-	 * Removes item from the given coordinates
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
-	 */
-	public void remove(int x, int y, int z) {
-		items[x][y][z] = null;
-	}
-
-	/**
-	 * puts an item at or around the given coordinate.
-	 * 
-	 * @param item
-	 *            Item to place
-	 * @param x
-	 *            coordinate
-	 * @param y
-	 *            coordinate
-	 * @param z
-	 *            coordinate
-	 */
-	public void addAtEmptySpace(Item item, int x, int y, int z) {
-		if (item == null)
-			return;
-
-		List<Point> points = new ArrayList<Point>();
-		List<Point> checked = new ArrayList<Point>();
-
-		points.add(new Point(x, y, z));
-
-		while (!points.isEmpty()) {
-			Point p = points.remove(0);
-			checked.add(p);
-
-			if (!tile(p.x, p.y, p.z).isGround())
-				continue;
-
-			if (items[p.x][p.y][p.z] == null) {
-				items[p.x][p.y][p.z] = item;
-				Creature c = this.creature(p.x, p.y, p.z);
-				if (c != null)
-					c.notify("A %s lands between your feet.", item.name());
-				return;
-			} else {
-				List<Point> neighbors = p.neighbors8();
-				neighbors.removeAll(checked);
-				points.addAll(neighbors);
-			}
-		}
 	}
 }
