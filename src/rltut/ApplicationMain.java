@@ -9,9 +9,25 @@ import rltut.screens.Screen;
 import rltut.screens.StartScreen;
 import asciiPanel.AsciiPanel;
 
+/**
+ * Main class for the application.
+ * 
+ * Presents the application window and packs an emulated terminal inside it.
+ * 
+ * @author Jeremy Rist
+ * 
+ * 
+ */
 public class ApplicationMain extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1060623638149583738L;
 
+	/**
+	 * Main Program entry point
+	 * 
+	 * @param args
+	 *            Command line arguments
+	 * 
+	 */
 	public static void main(String[] args) {
 		ApplicationMain app = new ApplicationMain();
 		app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,6 +38,10 @@ public class ApplicationMain extends JFrame implements KeyListener {
 
 	private Screen screen;
 
+	/**
+	 * Creates the new window and the emulated terminal.
+	 * 
+	 */
 	public ApplicationMain() {
 		super();
 		terminal = new AsciiPanel();
@@ -32,6 +52,13 @@ public class ApplicationMain extends JFrame implements KeyListener {
 		repaint();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	 * 
+	 * Pass the keyPressed event on to the emulated terminal
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		screen = screen.respondToUserInput(e);
