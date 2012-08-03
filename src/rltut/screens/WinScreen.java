@@ -4,6 +4,12 @@ import java.awt.event.KeyEvent;
 
 import asciiPanel.AsciiPanel;
 
+/**
+ * Splash screen for a win condition
+ * 
+ * @author Jeremy Rist
+ * 
+ */
 public class WinScreen implements Screen {
 
 	@Override

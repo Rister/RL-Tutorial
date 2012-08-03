@@ -4,6 +4,12 @@ import java.awt.event.KeyEvent;
 
 import asciiPanel.AsciiPanel;
 
+/**
+ * Splash screen for a lose condition
+ * 
+ * @author Jeremy Rist
+ * 
+ */
 public class LoseScreen implements Screen {
 
 	@Override

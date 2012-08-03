@@ -4,6 +4,12 @@ import java.awt.event.KeyEvent;
 
 import asciiPanel.AsciiPanel;
 
+/**
+ * Opening Splash Screen
+ * 
+ * @author Jeremy Rist
+ * 
+ */
 public class StartScreen implements Screen {
 
 	@Override
