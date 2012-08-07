@@ -26,6 +26,8 @@ public class Creature {
 	private int hp;
 	private int attackValue;
 	private int defenseValue;
+	private int maxFood;
+	private int food;
 
 	private int visionRadius;
 
@@ -59,24 +61,11 @@ public class Creature {
 		this.hp = maxHp;
 		this.attackValue = attack;
 		this.defenseValue = defense;
+		
+		this.maxFood = 1000;
+		this.food = maxFood / 3 *2;
 
 		this.visionRadius = 9;
-	}
-
-	/**
-	 * Attacks another creature and removes hit points from it.
-	 * 
-	 * @param other
-	 *            Creature being attacked
-	 */
-	private void attack(Creature other) {
-		int amount = Math.max(0, attackValue() - other.defenseValue());
-
-		amount = (int) (Math.random() * amount) + 1;
-
-		other.modifyHp(-amount);
-
-		doAction("attack the %s for %d damage", other.name, amount);
 	}
 
 	/**
@@ -200,6 +189,34 @@ public class Creature {
 	}
 
 	/**
+	 * Remove an Item from the Creature's Inventory and place at or near the
+	 * Creature's current location in the World.
+	 * 
+	 * @param item
+	 *            Item to drop from the Creature's Inventory
+	 */
+	public void drop(Item item) {
+		doAction("drop a " + item.name());
+		inventory.remove(item);
+		world.addAtEmptySpace(item, x, y, z);
+	}
+
+	/**
+	 * Eat an item.
+	 * 
+	 * @param item
+	 *            Item to eat.
+	 */
+	public void eat(Item item) {
+		modifyFood(item.foodValue());
+		inventory.remove(item);
+	}
+
+	public int food() {
+		return food;
+	}
+
+	/**
 	 * @return the creature's glyph
 	 */
 	public char glyph() {
@@ -220,25 +237,8 @@ public class Creature {
 		return inventory;
 	}
 
-	/**
-	 * Converts a given string to second person parlance.
-	 * 
-	 * @param text
-	 *            String to convert to second person
-	 * @return Second Personized String
-	 */
-	private String makeSecondPerson(String text) {
-		// TODO String and Grammar parser in Creature class: Yuck.
-		String[] words = text.split(" ");
-		words[0] = words[0] + "s";
-
-		StringBuilder builder = new StringBuilder();
-		for (String word : words) {
-			builder.append(" ");
-			builder.append(word);
-		}
-
-		return builder.toString().trim();
+	public int maxFood() {
+		return maxFood;
 	}
 
 	/**
@@ -249,8 +249,32 @@ public class Creature {
 	}
 
 	/**
+	 * Change how sated the Creature is. Kill the player if he has no food in
+	 * his belly.
+	 * 
+	 * @param amount
+	 *            Amount to change the food in the Creature's belly
+	 */
+	public void modifyFood(int amount) {
+		food += amount;
+		if (food > maxFood) {
+			food = maxFood;
+		} else if (food < 1 && isPlayer()) {
+			modifyHp(-1000);
+		}
+	}
+
+	/**
+	 * @return if the Creature is the player
+	 */
+	private boolean isPlayer() {
+		return glyph == '@';
+	}
+
+	/**
 	 * Adds hit points to a creature's hit points. If the creature's hit points
-	 * are reduced below 1, the creature is removed from the world.
+	 * are reduced below 1, the creature is removed from the world and leave a
+	 * corpse in its place.
 	 * 
 	 * @param amount
 	 *            Amount of HP to add.
@@ -259,8 +283,9 @@ public class Creature {
 		hp += amount;
 
 		if (hp < 1) {
-			world.remove(this);
 			doAction("die");
+			leaveCorpse();
+			world.remove(this);
 		}
 	}
 
@@ -316,6 +341,22 @@ public class Creature {
 	}
 
 	/**
+	 * Pick up the item at the Creature's current location in the world and add
+	 * to the Creature's inventory.
+	 */
+	public void pickup() {
+		Item item = world.item(x, y, z);
+
+		if (inventory.isFull() || item == null) {
+			doAction("grab at the ground");
+		} else {
+			doAction("pickup a %s", item.name());
+			world.remove(x, y, z);
+			inventory.add(item);
+		}
+	}
+
+	/**
 	 * Set the creature's AI.
 	 * 
 	 * @param ai
@@ -357,32 +398,49 @@ public class Creature {
 	}
 
 	/**
-	 * Pick up the item at the Creature's current location in the world and add
-	 * to the Creature's inventory.
+	 * Attacks another creature and removes hit points from it.
+	 * 
+	 * @param other
+	 *            Creature being attacked
 	 */
-	public void pickup() {
-		Item item = world.item(x, y, z);
+	private void attack(Creature other) {
+		int amount = Math.max(0, attackValue() - other.defenseValue());
 
-		if (inventory.isFull() || item == null) {
-			doAction("grab at the ground");
-		} else {
-			doAction("pickup a %s", item.name());
-			world.remove(x, y, z);
-			inventory.add(item);
-		}
+		amount = (int) (Math.random() * amount) + 1;
+
+		other.modifyHp(-amount);
+
+		doAction("attack the %s for %d damage", other.name, amount);
 	}
 
 	/**
-	 * Remove an Item from the Creature's Inventory and place at or near the
-	 * Creature's current location in the World.
-	 * 
-	 * @param item
-	 *            Item to drop from the Creature's Inventory
+	 * Leave a corpse where the Creature is standing.
 	 */
-	public void drop(Item item) {
-		doAction("drop a " + item.name());
-		inventory.remove(item);
-		world.addAtEmptySpace(item, x, y, z);
+	private void leaveCorpse() {
+		Item corpse = new Item('%', color, name + " corpse");
+		corpse.modifyFoodValue(maxHp * 3);
+		world.addAtEmptySpace(corpse, x, y, z);
+	}
+
+	/**
+	 * Converts a given string to second person parlance.
+	 * 
+	 * @param text
+	 *            String to convert to second person
+	 * @return Second Personized String
+	 */
+	private String makeSecondPerson(String text) {
+		// TODO String and Grammar parser in Creature class: Yuck.
+		String[] words = text.split(" ");
+		words[0] = words[0] + "s";
+
+		StringBuilder builder = new StringBuilder();
+		for (String word : words) {
+			builder.append(" ");
+			builder.append(word);
+		}
+
+		return builder.toString().trim();
 	}
 
 }

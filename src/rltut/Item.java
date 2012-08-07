@@ -16,17 +16,7 @@ public class Item {
 	private char glyph;
 	private Color color;
 
-	public String name() {
-		return name;
-	}
-
-	public char glyph() {
-		return glyph;
-	}
-
-	public Color color() {
-		return color;
-	}
+	private int foodValue;
 
 	/**
 	 * Create a new item.
@@ -42,6 +32,32 @@ public class Item {
 		this.name = name;
 		this.glyph = glyph;
 		this.color = color;
+	}
+
+	public Color color() {
+		return color;
+	}
+
+	public int foodValue() {
+		return foodValue;
+	}
+
+	public char glyph() {
+		return glyph;
+	}
+
+	/**
+	 * Modify the food value of the item.
+	 * 
+	 * @param amount
+	 *            amount to add to foodValue
+	 */
+	public void modifyFoodValue(int amount) {
+		foodValue += amount;
+	}
+
+	public String name() {
+		return name;
 	}
 
 }
