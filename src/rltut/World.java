@@ -87,6 +87,12 @@ public class World {
 	 *            coordinate
 	 */
 	public void addAtEmptySpace(Item item, int x, int y, int z) {
+		/*
+		 * TODO: This routine will currently fail silently if there is no empty
+		 * space in which to place the item and the item will simply disappear
+		 * from the game. This should probably be fixed so the player is warned
+		 * and he can keep the item instead.
+		 */
 		if (item == null)
 			return;
 

@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The World factory
+ * 
+ * This class will put a world together and spit it out.
+ * 
+ * @author Jeremy Rist
+ * 
+ */
 public class WorldBuilder {
 	private int width;
 	private int height;
@@ -12,6 +20,14 @@ public class WorldBuilder {
 	private int[][][] regions;
 	private int nextRegion;
 
+	/**
+	 * @param width
+	 *            Width or X-dimension of the world
+	 * @param height
+	 *            Height or Y-dimension of the world
+	 * @param depth
+	 *            depth or Z-dimension of the world
+	 */
 	public WorldBuilder(int width, int height, int depth) {
 		this.width = width;
 		this.height = height;
@@ -21,10 +37,21 @@ public class WorldBuilder {
 		this.nextRegion = 1;
 	}
 
+	/**
+	 * Final method to return a completed World object.
+	 * 
+	 * @return A new world
+	 */
 	public World build() {
 		return new World(tiles);
 	}
 
+	/**
+	 * Cycles through the z-levels and connects each one with the level below
+	 * it.
+	 * 
+	 * @return WorldBuilder with downward stairs added.
+	 */
 	public WorldBuilder connectRegions() {
 		for (int z = 0; z < depth - 1; z++) {
 			connectRegionsDown(z);
@@ -32,6 +59,12 @@ public class WorldBuilder {
 		return this;
 	}
 
+	/**
+	 * Connects a given z-level with the z-level below it.
+	 * 
+	 * @param z
+	 *            z-level to connect with the one below it.
+	 */
 	private void connectRegionsDown(int z) {
 		List<String> connected = new ArrayList<String>();
 
@@ -49,6 +82,17 @@ public class WorldBuilder {
 		}
 	}
 
+	/**
+	 * Connects a z-level with the z-level below it by placing stairs between
+	 * two specified regions.
+	 * 
+	 * @param z
+	 *            z-level to connect to the one below it.
+	 * @param r1
+	 *            region to connect to lower level.
+	 * @param r2
+	 *            region on lower level to connect to
+	 */
 	private void connectRegionsDown(int z, int r1, int r2) {
 		List<Point> candidates = findRegionOverlaps(z, r1, r2);
 
@@ -61,6 +105,13 @@ public class WorldBuilder {
 		} while (candidates.size() / stairs > 250);
 	}
 
+	/**
+	 * Looks through the world and identifies contiguous regions. If the region
+	 * is too small, it will remove them, otherwise it will mark them with a
+	 * region ID number.
+	 * 
+	 * @return a WorldBuilder with the contiguous regions marked
+	 */
 	private WorldBuilder createRegions() {
 		regions = new int[width][height][depth];
 
@@ -79,6 +130,20 @@ public class WorldBuilder {
 		return this;
 	}
 
+	/**
+	 * Assigns a region number to all the tiles in the region containing a given
+	 * tile.
+	 * 
+	 * @param region
+	 *            number to assign to the region
+	 * @param x
+	 *            x-coordinate of a tile in the region
+	 * @param y
+	 *            y-coordinate of a tile in the region
+	 * @param z
+	 *            z-coordinate of a tile in the region
+	 * @return number of tiles in the region
+	 */
 	private int fillRegion(int region, int x, int y, int z) {
 		int size = 1;
 		ArrayList<Point> open = new ArrayList<Point>();
@@ -105,6 +170,17 @@ public class WorldBuilder {
 		return size;
 	}
 
+	/**
+	 * Finds the points where the selected regions overlap.
+	 * 
+	 * @param z
+	 *            base z-level
+	 * @param r1
+	 *            region on base z-level
+	 * @param r2
+	 *            region below base z-level
+	 * @return List of points where the regions overlap
+	 */
 	private List<Point> findRegionOverlaps(int z, int r1, int r2) {
 		ArrayList<Point> candidates = new ArrayList<Point>();
 
@@ -122,11 +198,22 @@ public class WorldBuilder {
 		return candidates;
 	}
 
+	/**
+	 * Creates a new factory and goes through the steps to create a randomized
+	 * dungeon in it.
+	 * 
+	 * @return A factory containing a randomized world.
+	 */
 	public WorldBuilder makeCaves() {
 		return randomizeTiles().smooth(8).createRegions().connectRegions()
 				.addExitStairs();
 	}
 
+	/**
+	 * Fills the world with random Floor and Wall tiles.
+	 * 
+	 * @return WorldBuilder containing a world with random tiles.
+	 */
 	private WorldBuilder randomizeTiles() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -139,6 +226,14 @@ public class WorldBuilder {
 		return this;
 	}
 
+	/**
+	 * Removes the specified region by filling it in with WALL tiles.
+	 * 
+	 * @param region
+	 *            number of the region to remove
+	 * @param z
+	 *            z-level of the region to remove
+	 */
 	private void removeRegion(int region, int z) {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -150,6 +245,13 @@ public class WorldBuilder {
 		}
 	}
 
+	/**
+	 * Smoothes the world using a simple form of cellular automata
+	 * 
+	 * @param times
+	 *            Number of times to smooth the world
+	 * @return WorldBuilder with the maps smoothed
+	 */
 	private WorldBuilder smooth(int times) {
 		Tile[][][] tiles2 = new Tile[width][height][depth];
 		for (int time = 0; time < times; time++) {
@@ -180,6 +282,11 @@ public class WorldBuilder {
 		return this;
 	}
 
+	/**
+	 * Adds an exit staircase to the top z-level
+	 * 
+	 * @return WorldBuilder with exit stairs added.
+	 */
 	private WorldBuilder addExitStairs() {
 		int x = -1;
 		int y = -1;

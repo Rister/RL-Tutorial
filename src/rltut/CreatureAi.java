@@ -1,13 +1,36 @@
 package rltut;
 
+/**
+ * AI Class for Creatures. Contains the decision making logic for Creatures.
+ * 
+ * @author Jeremy Rist
+ * 
+ */
 public class CreatureAi {
 	protected Creature creature;
 
+	/**
+	 * Adds a new AI to a creature class.
+	 * 
+	 * @param creature
+	 *            Creature to add Ai to.
+	 */
 	public CreatureAi(Creature creature) {
 		this.creature = creature;
 		this.creature.setCreatureAi(this);
 	}
 
+	/**
+	 * Check to see if the Creature can see a given tile.
+	 * 
+	 * @param wx
+	 *            world x-coordinate
+	 * @param wy
+	 *            world y-coordinate
+	 * @param wz
+	 *            world z-coordinate
+	 * @return if the Creature can see a given coordinate
+	 */
 	public boolean canSee(int wx, int wy, int wz) {
 		if (creature.z != wz)
 			return false;
@@ -39,9 +62,15 @@ public class CreatureAi {
 	public void onNotify(String message) {
 	}
 
+	/**
+	 * Take a turn.
+	 */
 	public void onUpdate() {
 	}
-	
+
+	/**
+	 * Move creature one tile in a random direction
+	 */
 	public void wander() {
 		int mx = (int) (Math.random() * 3) - 1;
 		int my = (int) (Math.random() * 3) - 1;
