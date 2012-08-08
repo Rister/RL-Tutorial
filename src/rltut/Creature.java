@@ -156,7 +156,9 @@ public class Creature {
 	 *            world z-coordinate
 	 */
 	public void dig(int wx, int wy, int wz) {
+		modifyFood(-10);
 		world.dig(wx, wy, wz);
+		doAction("dig");
 	}
 
 	/**
@@ -387,6 +389,7 @@ public class Creature {
 	 * Take a turn.
 	 */
 	public void update() {
+		modifyFood(-1);
 		ai.onUpdate();
 	}
 

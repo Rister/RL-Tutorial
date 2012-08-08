@@ -119,13 +119,31 @@ public class PlayScreen implements Screen {
 		terminal.write(player.glyph(), player.x - left, player.y - top,
 				player.color());
 
-		String stats = String
-				.format(" %3d/%3d hp", player.hp(), player.maxHp());
+		String stats = String.format(" %3d/%3d hp %8s", player.hp(),
+				player.maxHp(), hunger());
 		terminal.write(stats, 1, 23);
 		displayMessages(terminal, messages);
 
 		if (subscreen != null)
 			subscreen.displayOutput(terminal);
+	}
+
+	/**
+	 * Decides what to tell the player about his current hunger level.
+	 * 
+	 * @return string containing the current hunger level.
+	 */
+	private Object hunger() {
+		if (player.food() < player.maxFood() * 0.1)
+			return "Starving";
+		else if (player.food() < player.maxFood() * 0.2)
+			return "Hungry";
+		else if (player.food() > player.maxFood() * 0.9)
+			return "Stuffed";
+		else if (player.food() > player.maxFood() * 0.8)
+			return "Full";
+		else
+			return "";
 	}
 
 	/**
@@ -223,6 +241,9 @@ public class PlayScreen implements Screen {
 				break;
 			case KeyEvent.VK_D:
 				subscreen = new DropScreen(player);
+				break;
+			case KeyEvent.VK_E:
+				subscreen = new EatScreen(player);
 				break;
 			}
 
