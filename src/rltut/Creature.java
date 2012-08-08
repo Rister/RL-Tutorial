@@ -61,9 +61,9 @@ public class Creature {
 		this.hp = maxHp;
 		this.attackValue = attack;
 		this.defenseValue = defense;
-		
+
 		this.maxFood = 1000;
-		this.food = maxFood / 3 *2;
+		this.food = maxFood / 3 * 2;
 
 		this.visionRadius = 9;
 	}
@@ -259,18 +259,14 @@ public class Creature {
 	 */
 	public void modifyFood(int amount) {
 		food += amount;
+
 		if (food > maxFood) {
+			maxFood = (maxFood + food) / 2;
 			food = maxFood;
+			notify("You can't believe your stomach can hold that much!");
 		} else if (food < 1 && isPlayer()) {
 			modifyHp(-1000);
 		}
-	}
-
-	/**
-	 * @return if the Creature is the player
-	 */
-	private boolean isPlayer() {
-		return glyph == '@';
 	}
 
 	/**
@@ -414,6 +410,13 @@ public class Creature {
 		other.modifyHp(-amount);
 
 		doAction("attack the %s for %d damage", other.name, amount);
+	}
+
+	/**
+	 * @return if the Creature is the player
+	 */
+	private boolean isPlayer() {
+		return glyph == '@';
 	}
 
 	/**
