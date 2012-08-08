@@ -56,5 +56,19 @@ public class StuffFactory {
 		world.addAtEmptyLocation(item, depth);
 		return item;
 	}
+	
+	public Item newFries(int depth) {
+		Item item = new Item('%', AsciiPanel.brightYellow, "box of stale fries");
+		world.addAtEmptyLocation(item, depth);
+		item.modifyFoodValue(125);
+		return item;
+	}
+	
+	public Item newFriedFish(int depth) {
+		Item item = new Item('%', AsciiPanel.cyan, "stale fried fish");
+		world.addAtEmptyLocation(item, depth);
+		item.modifyFoodValue(500);
+		return item;
+	}
 
 }
