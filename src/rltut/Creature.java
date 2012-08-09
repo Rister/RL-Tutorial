@@ -31,6 +31,9 @@ public class Creature {
 
 	private int visionRadius;
 
+	private Item weapon;
+	private Item armor;
+
 	/**
 	 * @param world
 	 *            World where the creature lives
@@ -68,13 +71,18 @@ public class Creature {
 		this.visionRadius = 9;
 	}
 
+	public Item armor() {
+		return armor;
+	}
+
 	/**
 	 * A public getter. Probably ought to be getAttackValue()
 	 * 
 	 * @return attackValue
 	 */
 	public int attackValue() {
-		return attackValue;
+		return attackValue + (weapon == null ? 0 : weapon.attackValue())
+				+ (armor == null ? 0 : armor.attackValue());
 	}
 
 	/**
@@ -142,7 +150,8 @@ public class Creature {
 	 * @return defenseValue
 	 */
 	public int defenseValue() {
-		return defenseValue;
+		return defenseValue + (weapon == null ? 0 : weapon.defenseValue())
+				+ (armor == null ? 0 : armor.defenseValue());
 	}
 
 	/**
@@ -198,10 +207,11 @@ public class Creature {
 	 *            Item to drop from the Creature's Inventory
 	 */
 	public void drop(Item item) {
+if (world.addAtEmptySpace(item, x, y, z)	){
 		doAction("drop a " + item.name());
 		inventory.remove(item);
-		world.addAtEmptySpace(item, x, y, z);
-	}
+		unequip(item);
+	} else { notify("There's nowhere to drop the %s.", item.name());}
 
 	/**
 	 * Eat an item.
@@ -210,8 +220,27 @@ public class Creature {
 	 *            Item to eat.
 	 */
 	public void eat(Item item) {
+		if (item.foodValue() < 0)
+			notify("Gross!");
+
 		modifyFood(item.foodValue());
 		inventory.remove(item);
+		unequip(item);
+	}
+
+	public void equip(Item item) {
+		if (item.attackValue() == 0 && item.defenseValue() == 0)
+			return;
+
+		if (item.attackValue() >= item.defenseValue()) {
+			unequip(weapon);
+			doAction("wield a " + item.name());
+			weapon = item;
+		} else {
+			unequip(armor);
+			doAction("put on a " + item.name());
+			weapon = item;
+		}
 	}
 
 	public int food() {
@@ -379,6 +408,19 @@ public class Creature {
 		return world.tile(wx, wy, wz);
 	}
 
+	public void unequip(Item item) {
+		if (item == null)
+			return;
+
+		if (item == armor) {
+			doAction("remove a " + item.name());
+			armor = null;
+		} else if (item == weapon) {
+			doAction("put away a " + item.name());
+			weapon = null;
+		}
+	}
+
 	/**
 	 * Run the creature's update routine.
 	 * 
@@ -394,6 +436,10 @@ public class Creature {
 	 */
 	public int visionRadius() {
 		return visionRadius;
+	}
+
+	public Item weapon() {
+		return weapon;
 	}
 
 	/**
