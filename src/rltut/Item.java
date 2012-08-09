@@ -18,6 +18,9 @@ public class Item {
 
 	private int foodValue;
 
+	private int attackValue;
+	private int defenseValue;
+
 	/**
 	 * Create a new item.
 	 * 
@@ -34,8 +37,16 @@ public class Item {
 		this.color = color;
 	}
 
+	public int attackValue() {
+		return attackValue;
+	}
+
 	public Color color() {
 		return color;
+	}
+
+	public int defenseValue() {
+		return defenseValue;
 	}
 
 	public int foodValue() {
@@ -44,6 +55,14 @@ public class Item {
 
 	public char glyph() {
 		return glyph;
+	}
+
+	public void modifyAttackValue(int amount) {
+		attackValue += amount;
+	}
+
+	public void modifyDefenseValue(int amount) {
+		defenseValue += amount;
 	}
 
 	/**
