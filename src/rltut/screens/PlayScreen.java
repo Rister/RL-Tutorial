@@ -67,6 +67,8 @@ public class PlayScreen implements Screen {
 			for (int i = 0; i < 2; i++) {
 				factory.newVaccuumCleaner(z);
 				factory.newFriedFish(z);
+				factory.randomArmor(z);
+				factory.randomWeapon(z);
 			}
 		}
 		factory.newVictoryItem(world.depth() - 1);
