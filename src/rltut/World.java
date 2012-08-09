@@ -86,7 +86,7 @@ public class World {
 	 * @param z
 	 *            coordinate
 	 */
-	public void addAtEmptySpace(Item item, int x, int y, int z) {
+	public boolean addAtEmptySpace(Item item, int x, int y, int z) {
 		/*
 		 * TODO: This routine will currently fail silently if there is no empty
 		 * space in which to place the item and the item will simply disappear
@@ -94,7 +94,7 @@ public class World {
 		 * and he can keep the item instead.
 		 */
 		if (item == null)
-			return;
+			return true;
 
 		List<Point> points = new ArrayList<Point>();
 		List<Point> checked = new ArrayList<Point>();
@@ -113,13 +113,14 @@ public class World {
 				Creature c = this.creature(p.x, p.y, p.z);
 				if (c != null)
 					c.notify("A %s lands between your feet.", item.name());
-				return;
+				return true;
 			} else {
 				List<Point> neighbors = p.neighbors8();
 				neighbors.removeAll(checked);
 				points.addAll(neighbors);
 			}
 		}
+		return false;
 	}
 
 	/**
