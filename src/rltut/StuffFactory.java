@@ -143,4 +143,12 @@ public class StuffFactory {
 			return newStaff(depth);
 		}
 	}
+
+	public Item newEdibleWeapon(int depth) {
+		Item item = new Item(')', AsciiPanel.yellow, "baguette");
+		item.modifyAttackValue(3);
+		item.modifyFoodValue(50);
+		world.addAtEmptyLocation(item, depth);
+		return item;
+	}
 }
