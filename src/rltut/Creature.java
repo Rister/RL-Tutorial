@@ -207,11 +207,14 @@ public class Creature {
 	 *            Item to drop from the Creature's Inventory
 	 */
 	public void drop(Item item) {
-if (world.addAtEmptySpace(item, x, y, z)	){
-		doAction("drop a " + item.name());
-		inventory.remove(item);
-		unequip(item);
-	} else { notify("There's nowhere to drop the %s.", item.name());}
+		if (world.addAtEmptySpace(item, x, y, z)) {
+			doAction("drop a " + item.name());
+			inventory.remove(item);
+			unequip(item);
+		} else {
+			notify("There's nowhere to drop the %s.", item.name());
+		}
+	}
 
 	/**
 	 * Eat an item.
