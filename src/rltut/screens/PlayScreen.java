@@ -216,6 +216,8 @@ public class PlayScreen implements Screen {
 	@Override
 	public Screen respondToUserInput(KeyEvent key) {
 		// TODO: Make the game not update when an invalid key is pressed.
+		int level = player.level();
+		
 		if (subscreen != null) {
 			subscreen = subscreen.respondToUserInput(key);
 		} else {
@@ -281,6 +283,9 @@ public class PlayScreen implements Screen {
 
 		if (player.hp() < 1)
 			return new LoseScreen();
+		
+		if (player.level() > level)
+			subscreen = new LevelUpScreen(player, player.level() - level);
 
 		return this;
 	}

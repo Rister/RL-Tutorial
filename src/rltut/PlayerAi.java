@@ -33,5 +33,9 @@ public class PlayerAi extends CreatureAi {
 	public boolean canSee(int wx, int wy, int wz) {
 		return fov.isVisible(wx, wy, wz);
 	}
+	
+	@Override
+	public void onGainLevel() {
+	}
 
 }
