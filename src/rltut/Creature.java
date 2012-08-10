@@ -28,6 +28,8 @@ public class Creature {
 	private int defenseValue;
 	private int maxFood;
 	private int food;
+	private int xp;
+	private int level;
 
 	private int visionRadius;
 
@@ -231,6 +233,12 @@ public class Creature {
 		unequip(item);
 	}
 
+	/**
+	 * Equip an item as a weapon or armor
+	 * 
+	 * @param item
+	 *            Item to equip
+	 */
 	public void equip(Item item) {
 		if (item.attackValue() == 0 && item.defenseValue() == 0)
 			return;
@@ -269,6 +277,10 @@ public class Creature {
 	 */
 	public Inventory inventory() {
 		return inventory;
+	}
+
+	public int level() {
+		return level;
 	}
 
 	public int maxFood() {
@@ -316,6 +328,24 @@ public class Creature {
 			doAction("die");
 			leaveCorpse();
 			world.remove(this);
+		}
+	}
+
+	/**
+	 * Gain or lose XP.
+	 * 
+	 * @param amount
+	 *            amount to change xp. Either positive or negative.
+	 */
+	public void modifyXp(int amount) {
+		xp += amount;
+		notify("you %s %d xp.", amount < 0 ? "lose" : "gain", amount);
+
+		while (xp > (int) (Math.pow(level, 1.5) * 20)) {
+			level++;
+			doAction("advance to level %d", level);
+			ai.onGainLevel();
+			modifyHp(level * 2);
 		}
 	}
 
@@ -411,6 +441,12 @@ public class Creature {
 		return world.tile(wx, wy, wz);
 	}
 
+	/**
+	 * Unequip an item.
+	 * 
+	 * @param item
+	 *            Item to unequip
+	 */
 	public void unequip(Item item) {
 		if (item == null)
 			return;
@@ -445,6 +481,10 @@ public class Creature {
 		return weapon;
 	}
 
+	public int xp() {
+		return xp;
+	}
+
 	/**
 	 * Attacks another creature and removes hit points from it.
 	 * 
@@ -459,6 +499,16 @@ public class Creature {
 		other.modifyHp(-amount);
 
 		doAction("attack the %s for %d damage", other.name, amount);
+
+		if (other.hp < 1)
+			gainXP(other);
+	}
+
+	private void gainXP(Creature other) {
+		int amount = other.maxHp + other.attackValue() + other.defenseValue()
+				- level * 2;
+		if (amount > 0)
+			modifyXp(amount);
 	}
 
 	/**
