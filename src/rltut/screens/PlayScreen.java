@@ -70,6 +70,9 @@ public class PlayScreen implements Screen {
 				factory.randomArmor(z);
 				factory.randomWeapon(z);
 			}
+			for (int i = 0; i < z + 3; i++) {
+				factory.newZombie(z, player);
+			}
 		}
 		factory.newVictoryItem(world.depth() - 1);
 	}

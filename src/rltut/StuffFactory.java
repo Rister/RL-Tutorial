@@ -151,4 +151,12 @@ public class StuffFactory {
 		world.addAtEmptyLocation(item, depth);
 		return item;
 	}
+
+	public Creature newZombie(int depth, Creature player) {
+		Creature zombie = new Creature(world, "rotting zombie", 'z',
+				AsciiPanel.white, 50, 10, 10);
+		world.addAtEmptyLocation(zombie, depth);
+		new ZombieAi(zombie, player);
+		return zombie;
+	}
 }
