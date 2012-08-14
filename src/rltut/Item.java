@@ -79,4 +79,19 @@ public class Item {
 		return name;
 	}
 
+	public String details() {
+		String details = "";
+		
+		if (attackValue != 0)
+			details += "     attack:" + attackValue;
+		
+		if (defenseValue != 0)
+			details += "     defense:" + defenseValue;
+		
+		if (foodValue != 0)
+			details += "     food:" + foodValue;
+		
+		return details;
+	}
+
 }
