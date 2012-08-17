@@ -141,7 +141,10 @@ public class Creature {
 	 * @return Creature at given coordinate
 	 */
 	public Creature creature(int wx, int wy, int wz) {
-		return world.creature(wx, wy, wz);
+		if (canSee(wx, wy, wz))
+			return world.creature(wx, wy, wz);
+		else
+			return null;
 	}
 
 	/**
@@ -154,6 +157,12 @@ public class Creature {
 	public int defenseValue() {
 		return defenseValue + (weapon == null ? 0 : weapon.defenseValue())
 				+ (armor == null ? 0 : armor.defenseValue());
+	}
+
+	public String details() {
+		return String.format(
+				"    level:%d    attack:%d    defense:%d    hp:%d", level,
+				attackValue(), defenseValue(), hp);
 	}
 
 	/**
@@ -258,6 +267,27 @@ public class Creature {
 		return food;
 	}
 
+	public void gainAttackValue() {
+		attackValue += 2;
+		doAction("look stronger");
+	}
+
+	public void gainDefenseValue() {
+		defenseValue += 2;
+		doAction("look tougher");
+	}
+
+	public void gainMaxHp() {
+		maxHp += 10;
+		hp += 10;
+		doAction("look healthier");
+	}
+
+	public void gainVision() {
+		visionRadius += 1;
+		doAction("look more aware");
+	}
+
 	/**
 	 * @return the creature's glyph
 	 */
@@ -277,6 +307,13 @@ public class Creature {
 	 */
 	public Inventory inventory() {
 		return inventory;
+	}
+
+	public Item item(int wx, int wy, int wz) {
+		if (canSee(wx, wy, wz))
+			return world.item(wx, wy, wz);
+		else
+			return null;
 	}
 
 	public int level() {
@@ -416,6 +453,10 @@ public class Creature {
 		}
 	}
 
+	public Tile realTile(int wx, int wy, int wz) {
+		return world.tile(wx, wy, wz);
+	}
+
 	/**
 	 * Set the creature's AI.
 	 * 
@@ -438,7 +479,10 @@ public class Creature {
 	 * @return Tile object from the given coordinate in the Creature's world
 	 */
 	public Tile tile(int wx, int wy, int wz) {
-		return world.tile(wx, wy, wz);
+		if (canSee(wx, wy, wz))
+			return world.tile(wx, wy, wz);
+		else
+			return ai.rememberedTile(wx, wy, wz);
 	}
 
 	/**
@@ -547,32 +591,4 @@ public class Creature {
 
 		return builder.toString().trim();
 	}
-
-	public void gainMaxHp() {
-		maxHp += 10;
-		hp += 10;
-		doAction("look healthier");
-	}
-
-	public void gainAttackValue() {
-		attackValue += 2;
-		doAction("look stronger");
-	}
-
-	public void gainDefenseValue() {
-		defenseValue += 2;
-		doAction("look tougher");
-	}
-
-	public void gainVision() {
-		visionRadius += 1;
-		doAction("look more aware");
-	}
-
-	public String details() {
-		return String.format(
-				"    level:%d    attack:%d    defense:%d    hp:%d", level,
-				attackValue(), defenseValue(), hp);
-	}
-
 }
