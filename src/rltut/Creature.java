@@ -569,4 +569,10 @@ public class Creature {
 		doAction("look more aware");
 	}
 
+	public String details() {
+		return String.format(
+				"    level:%d    attack:%d    defense:%d    hp:%d", level,
+				attackValue(), defenseValue(), hp);
+	}
+
 }

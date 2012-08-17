@@ -17,8 +17,8 @@ import asciiPanel.AsciiPanel;
  */
 public abstract class TargetBasedScreen implements Screen {
 
-	private Creature player;
-	private String caption;
+	protected Creature player;
+	protected String caption;
 	private int sx;
 	private int sy;
 	private int x;

@@ -14,31 +14,33 @@ public enum Tile {
 	/**
 	 * Floor tile
 	 */
-	FLOOR((char) 250, AsciiPanel.yellow),
+	FLOOR((char) 250, AsciiPanel.yellow, "A dirt and rock cave floor."),
 	/**
 	 * Wall Tile
 	 */
-	WALL((char) 177, AsciiPanel.yellow),
+	WALL((char) 177, AsciiPanel.yellow, "A dirt and rock cave wall."),
 	/**
 	 * Out of bounds
 	 */
-	BOUNDS('x', AsciiPanel.brightBlack),
+	BOUNDS('x', AsciiPanel.brightBlack, "The abyss beyond that which is known."),
 	/**
 	 * Downward Staircase
 	 */
-	STAIRS_DOWN('>', AsciiPanel.white),
+	STAIRS_DOWN('>', AsciiPanel.white, "A stone staircase leading down."),
 	/**
 	 * Upward Staircase
 	 */
-	STAIRS_UP('<', AsciiPanel.white),
+	STAIRS_UP('<', AsciiPanel.white, "A stone staircase leading up."),
 	/**
 	 * Unknown Tile
 	 */
-	UNKNOWN(' ', AsciiPanel.white);
+	UNKNOWN(' ', AsciiPanel.white, "Your guess is as good as mine.");
 
 	private char glyph;
 
 	private Color color;
+	
+	private String details;
 
 	/**
 	 * Create a new tile
@@ -48,9 +50,10 @@ public enum Tile {
 	 * @param color
 	 *            color for the tile
 	 */
-	Tile(char glyph, Color color) {
+	Tile(char glyph, Color color, String details) {
 		this.glyph = glyph;
 		this.color = color;
+		this.details = details;
 	}
 
 	/**
@@ -80,4 +83,11 @@ public enum Tile {
 	public boolean isGround() {
 		return this != WALL && this != BOUNDS;
 	}
+	
+	
+	public String details() {
+		return details;
+	}
+	}
+	 */
 }
