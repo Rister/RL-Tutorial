@@ -88,6 +88,4 @@ public enum Tile {
 	public String details() {
 		return details;
 	}
-	}
-	 */
 }
